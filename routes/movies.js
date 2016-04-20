@@ -26,23 +26,28 @@ router.route('/movies')
             res.json(movies);
         });
     })
-    .post(function (req, res) {
-        var movie = new Movie(req.body);
+    .post(function (request, response) {
 
-        movie.save(function (err) {
-            if (err) {
-                return res.send(err);
+        if (request.body.title == null || request.body.releaseYear == null || request.body.director == null || request.body.genre == null) {
+            response.status(400).json({'error': 'Missing body arguments'});
+        }
+
+        var movie = new Movie(request.body);
+
+        movie.save(function (error) {
+            if (error) {
+                return response.status(400).json(error);
             }
 
-            res.send({message: 'Movie Added'});
+            response.send({message: 'Movie Added'});
         });
     });
 
 router.route('/movies/:id')
     .put(function (req, res) {
-        Movie.findOne({_id: req.params.id}, function (err, movie) {
-            if (err) {
-                return res.send(err);
+        Movie.findOne({_id: req.params.id}, function (error, movie) {
+            if (error) {
+                return response.status(400).json(error);
             }
 
             for (prop in req.body) {
@@ -52,7 +57,7 @@ router.route('/movies/:id')
             // save the movie
             movie.save(function (err) {
                 if (err) {
-                    return res.send(err);
+                    return response.status(400).json(err);
                 }
 
                 res.json({message: 'Movie updated!'});
@@ -62,18 +67,18 @@ router.route('/movies/:id')
     .delete(function (req, res) {
         Movie.remove({
             _id: req.params.id
-        }, function (err, movie) {
-            if (err) {
-                return res.send(err);
+        }, function (error, movie) {
+            if (error) {
+                return response.status(400).json(error);
             }
 
             res.json({message: 'Successfully deleted'});
         });
     })
     .get(function(req, res) {
-        Movie.findOne({ _id: req.params.id}, function(err, movie) {
-            if (err) {
-                return res.send(err);
+        Movie.findOne({ _id: req.params.id}, function(error, movie) {
+            if (error) {
+                return response.status(400).json(error);
             }
 
             res.json(movie);
@@ -86,13 +91,13 @@ router.route('/movies/:id/associate')
         Movie.findOne({_id: request.params.id}, function(error, movie){
 
             if (error || request.body['director'] == null) {
-                return response.send({"error": 400});
+                return response.status(400).json(error);
             } else {
 
                 Director.findOne({_id: request.body.director}, function(error, director){
 
                     if (error) {
-                        return response.send({"error": 400});
+                        return response.status(400).json(error);
                     } else {
 
                         movie["director"] = {
@@ -102,7 +107,7 @@ router.route('/movies/:id/associate')
 
                         movie.save(function(error) {
                             if (error) {
-                                return response.send(error);
+                                return response.status(400).json(error);
                             }
 
                             response.json({message: 'Director added!', 'data': movie});

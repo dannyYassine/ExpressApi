@@ -27,7 +27,7 @@ router.route('/directors')
             if (error == null) {
                 return response.json(directors);
             } else {
-                response.send({'error': 400});
+                return response.status(400).json(error);
             }
 
         });
@@ -40,7 +40,7 @@ router.route('/directors')
         director.save(function(error){
 
             if (error) {
-                return response.send({'error': 400});
+                return response.status(400).json(error);
             } else {
                 return response.send({'statusCode': 200});
             }

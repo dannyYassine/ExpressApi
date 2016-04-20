@@ -78,8 +78,6 @@ app.use('/', function(req, res) {
 
 });
 
-
-
 app.set('port', process.env.PORT || 8000);
 
 var server = app.listen(env.NODE_PORT || 3000, env.NODE_IP || 'localhost', function () {
