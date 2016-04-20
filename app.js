@@ -68,7 +68,7 @@ app.use(bodyParser.urlencoded());
 
 app.use('/api', movies); //This is our route middleware
 app.use('/api', directors);
-app.use('/', health);
+app.use('/', require('./static/index.html'));
 
 
 app.set('port', process.env.PORT || 8000);
