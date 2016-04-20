@@ -8,8 +8,7 @@ router.route('/movies')
 
         // Check for authentication
         if (request.query.pass == null) {
-            response.send({'error': 'Please enter the pass parameter'});
-            response.end();
+            response.status(400).json({'error': 'Please enter the pass parameter'});
         } else if (request.query.pass != 'swift') {
             response.send({'error': 'Invalid pass parameter'});
             response.end();
