@@ -4,6 +4,20 @@ var express = require('express');
 var router = express.Router();
 
 router.route('/movies')
+    .all(function(request, response, next) {
+
+        // Check for authentication
+        if (request.query.pass == null) {
+            response.send({'error': 'Please enter the pass parameter'});
+            response.end();
+        } else if (request.query.pass != 'swift') {
+            response.send({'error': 'Invalid pass parameter'});
+            response.end();
+        } else {
+            next();
+        }
+
+    })
     .get(function (req, res) {
         Movie.find(function (err, movies) {
             if (err) {
