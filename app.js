@@ -59,10 +59,10 @@ app.use(bodyParser.urlencoded());
 
 // MIDDLEWARE
 
-app.use(function (req, res, next) {
-    console.log('Time:', Date.now());
-    next();
-});
+// app.use(function (req, res, next) {
+//     console.log('Time:', Date.now());
+//     next();
+// });
 
 // ROUTES
 
