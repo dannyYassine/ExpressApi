@@ -5,8 +5,16 @@ const http         = require('http'),
       sysInfo      = require('./utils/sys-info'),
       env          = process.env;
 
-let server = http.createServer(function (req, res) {
-  let url = req.url;
+var express = require('express');
+var bodyParser = require('body-parser');
+var mongoose = require('mongoose');
+var movies = require('./routes/movies'); //routes are defined here
+var directors = require('./routes/directors');
+var health = require('./routes/health');
+var app = express(); //Create the Express app
+
+var server = http.createServer(function (req, res) {
+  var url = req.url;
   if (url == '/') {
     url += 'index.html';
   }
@@ -27,7 +35,7 @@ let server = http.createServer(function (req, res) {
         res.writeHead(404);
         res.end();
       } else {
-        let ext = path.extname(url).slice(1);
+        var ext = path.extname(url).slice(1);
         res.setHeader('Content-Type', contentTypes[ext]);
         if (ext === 'html') {
           res.setHeader('Cache-Control', 'no-cache, no-store');
@@ -38,6 +46,38 @@ let server = http.createServer(function (req, res) {
   }
 });
 
-server.listen(env.NODE_PORT || 3000, env.NODE_IP || 'localhost', function () {
-  console.log(`Application worker ${process.pid} started...`);
+// DATABASE CONNECTION
+
+var dbName = 'test_api';
+var connectionString = 'mongodb://dannyyassine:dannyyassine@ds017070.mlab.com:17070/' + dbName;
+mongoose.connect(connectionString);
+
+// ADDING DEFAULT
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded());
+
+// MIDDLEWARE
+
+app.use(function (req, res, next) {
+    console.log('Time:', Date.now());
+    next();
 });
+
+// ROUTES
+
+app.use('/api', movies); //This is our route middleware
+app.use('/api', directors);
+app.use('/', health);
+
+
+app.set('port', process.env.PORT || 8000);
+
+var server = app.listen(env.NODE_PORT || 3000, env.NODE_IP || 'localhost', function () {
+    console.log('Express server listening on port ' + server.address().port);
+});
+
+
+// server.listen(env.NODE_PORT || 3000, env.NODE_IP || 'localhost', function () {
+//   console.log(`Application worker ${process.pid} started...`);
+// });
