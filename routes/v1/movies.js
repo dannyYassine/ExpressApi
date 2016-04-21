@@ -1,5 +1,5 @@
-var Movie = require('../models/movie');
-var Director = require('../models/director');
+var Movie = require('../../models/movie');
+var Director = require('../../models/director');
 var express = require('express');
 var router = express.Router();
 

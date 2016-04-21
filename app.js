@@ -8,10 +8,10 @@ const http         = require('http'),
 var express = require('express');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
-var movies = require('./routes/movies'); //routes are defined here
-var directors = require('./routes/directors');
-var apidoc = require('./routes/apidoc');
-var health = require('./routes/health');
+var movies = require('./routes/v1/movies'); //routes are defined here
+var directors = require('./routes/v1/directors');
+var apidoc = require('./routes/v1/apidoc');
+var health = require('./routes/v1/health');
 var app = express(); //Create the Express app
 
 // DATABASE CONNECTION

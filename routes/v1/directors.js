@@ -2,7 +2,7 @@
  * Created by dannyyassine on 2016-04-19.
  */
 
-var Directory = require('../models/director');
+var Directory = require('../../models/director');
 var express = require('express');
 var router = express.Router();
 
